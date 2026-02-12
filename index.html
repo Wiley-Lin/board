@@ -2,66 +2,59 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>UsDone Pro | Dark Mode Board</title>
+    <title>UsDone Pro | Smart Scale High-Res</title>
     <style>
         :root {
-            --bg: #1a1a1a; /* 深灰護眼底色 */
+            --bg: #1a1a1a;
             --panel: #2d2d2d;
             --morandi-green: #8e9775;
-            --morandi-blue: #a7bbc7;
-            --accent: #b57c7c;
-            --tool-bg: rgba(45, 45, 45, 0.9);
+            --tool-bg: rgba(45, 45, 45, 0.95);
             --text: #e0e0e0;
         }
 
         body, html { margin: 0; padding: 0; height: 100%; background: var(--bg); font-family: sans-serif; overflow: hidden; color: var(--text); }
 
-        /* 左側工具列 - 與畫板分開 */
+        /* 左側工具列 */
         .side-bar {
-            position: absolute; left: 30px; top: 50%; transform: translateY(-50%);
-            z-index: 100; background: var(--tool-bg); backdrop-filter: blur(15px);
-            padding: 25px 15px; border-radius: 24px; display: flex; flex-direction: column; gap: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5); width: 70px; align-items: center;
-            border: 1px solid rgba(255,255,255,0.1);
+            position: absolute; left: 25px; top: 50%; transform: translateY(-50%);
+            z-index: 100; background: var(--tool-bg); backdrop-filter: blur(20px);
+            padding: 20px 12px; border-radius: 24px; display: flex; flex-direction: column; gap: 18px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5); width: 65px; align-items: center;
+            border: 1px solid rgba(255,255,255,0.08);
         }
 
         .tool-btn {
-            width: 48px; height: 48px; border-radius: 14px; border: none; cursor: pointer;
-            background: #3d3d3d; transition: 0.3s; display: flex; align-items: center; justify-content: center;
-            font-size: 11px; font-weight: bold; color: #bbb;
+            width: 44px; height: 44px; border-radius: 12px; border: none; cursor: pointer;
+            background: #3d3d3d; transition: 0.25s; display: flex; align-items: center; justify-content: center;
+            font-size: 11px; font-weight: bold; color: #aaa;
         }
-        .tool-btn.active { background: var(--morandi-green); color: white; transform: scale(1.1); box-shadow: 0 0 15px rgba(142, 151, 117, 0.4); }
-        .tool-btn:hover:not(.active) { background: #4d4d4d; }
+        .tool-btn.active { background: var(--morandi-green); color: white; transform: scale(1.08); }
 
-        .control-group { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; border-top: 1px solid #444; padding-top: 15px; }
-        
-        input[type="color"] { border: none; width: 30px; height: 30px; cursor: pointer; background: none; }
-        input[type="range"] { width: 55px; accent-color: var(--morandi-green); }
+        .control-group { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; border-top: 1px solid #444; padding-top: 12px; }
+        input[type="color"] { border: none; width: 28px; height: 28px; cursor: pointer; background: none; }
+        input[type="range"] { width: 50px; accent-color: var(--morandi-green); }
 
-        /* 頂部按鈕 */
-        .top-bar { position: absolute; top: 25px; right: 40px; display: flex; gap: 15px; z-index: 100; }
-
+        /* 頂部操作鈕 */
+        .top-bar { position: absolute; top: 25px; right: 30px; display: flex; gap: 12px; z-index: 100; }
         .action-btn {
-            padding: 10px 22px; border-radius: 30px; border: none; cursor: pointer;
-            font-size: 13px; background: var(--panel); color: #ccc; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: 0.3s;
+            padding: 9px 20px; border-radius: 30px; border: none; cursor: pointer;
+            font-size: 13px; background: var(--panel); color: #bbb; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: 0.2s;
         }
         .action-btn:hover { background: #3d3d3d; color: white; }
 
-        /* 畫板容器 - 保持間距 */
+        /* 畫布容器 */
         #container { 
             width: 100vw; height: 100vh; 
             display: flex; justify-content: center; align-items: center;
-            padding-left: 100px; /* 為左側工具列留空間 */
-            box-sizing: border-box;
+            padding-left: 90px; box-sizing: border-box;
         }
 
         canvas { 
-            background: #ffffff; /* 畫板保持白色，方便標註與匯出 */
-            box-shadow: 0 20px 80px rgba(0,0,0,0.6); 
+            background: #ffffff; 
+            box-shadow: 0 20px 80px rgba(0,0,0,0.5); 
             border-radius: 4px;
+            cursor: crosshair;
         }
-
-        #hint { position: absolute; bottom: 20px; right: 40px; color: #666; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -72,11 +65,11 @@
     <button class="tool-btn" id="mode-mosaic" onclick="setMode('mosaic')">噴砂</button>
     
     <div class="control-group">
-        <input type="color" id="colorPicker" value="#b57c7c" title="框框顏色">
+        <input type="color" id="colorPicker" value="#ff0000">
     </div>
 
     <div class="control-group">
-        <input type="range" id="brushSize" min="10" max="100" value="40" title="馬賽克大小">
+        <input type="range" id="brushSize" min="10" max="120" value="40">
     </div>
 </div>
 
@@ -88,7 +81,6 @@
 
 <div id="container">
     <canvas id="canvas"></canvas>
-    <div id="hint">Ctrl + Z 可以還原 | 拖曳圖片即可上傳</div>
 </div>
 
 <script>
@@ -108,11 +100,13 @@
     let currentSnapshot = null;
 
     function init() {
-        // 設定畫板為 16:9 比例
-        const winW = window.innerWidth - 160;
-        const winH = window.innerHeight - 100;
-        canvas.width = Math.min(winW, winH * 1.77);
-        canvas.height = canvas.width / 1.77;
+        // 為了確保畫質，我們使用較大的內部解析度
+        canvas.width = 1920; 
+        canvas.height = 1080;
+        
+        // 開啟高品質渲染設定
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
         
         ctx.fillStyle = "#ffffff";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -132,7 +126,7 @@
         if (history.length >= MAX_HISTORY) history.shift();
         history.push({
             imagesData: JSON.parse(JSON.stringify(images.map(i => ({ x: i.x, y: i.y, w: i.w, h: i.h })))),
-            canvasURL: canvas.toDataURL()
+            canvasURL: canvas.toDataURL('image/png', 1.0)
         });
     }
 
@@ -141,16 +135,9 @@
         history.pop();
         const state = history[history.length - 1];
         
-        // 還原圖片物件數據
         images = images.slice(0, state.imagesData.length);
-        state.imagesData.forEach((data, i) => {
-            if (images[i]) {
-                images[i].x = data.x; images[i].y = data.y;
-                images[i].w = data.w; images[i].h = data.h;
-            }
-        });
+        state.imagesData.forEach((data, i) => { if (images[i]) Object.assign(images[i], data); });
 
-        // 還原畫布像素
         const img = new Image();
         img.onload = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -160,7 +147,6 @@
         img.src = state.canvasURL;
     }
 
-    // 拖曳上傳 (無數量限制)
     window.addEventListener('dragover', e => e.preventDefault());
     window.addEventListener('drop', e => {
         e.preventDefault();
@@ -170,7 +156,26 @@
             reader.onload = (ev) => {
                 const img = new Image();
                 img.onload = () => {
-                    images.push({ img, x: 50, y: 50, w: 280, h: 200, isDragging: false, isResizing: false });
+                    // 智慧縮放邏輯：如果圖片比畫布大，縮小到畫布的 60%
+                    const boardLimit = canvas.width * 0.6;
+                    let targetW = img.width;
+                    let targetH = img.height;
+
+                    if (targetW > boardLimit || targetH > boardLimit) {
+                        const ratio = Math.min(boardLimit / targetW, boardLimit / targetH);
+                        targetW *= ratio;
+                        targetH *= ratio;
+                    }
+
+                    images.push({ 
+                        img, 
+                        x: (canvas.width - targetW) / 2 + (images.length * 20), 
+                        y: (canvas.height - targetH) / 2 + (images.length * 20), 
+                        w: targetW, 
+                        h: targetH, 
+                        isDragging: false, 
+                        isResizing: false 
+                    });
                     render();
                     saveState();
                 };
@@ -182,32 +187,27 @@
 
     function render() {
         if (mode === 'move') {
-            // 移動模式下需清空重畫以顯示虛線框與縮放點
-            // 注意：這會重繪底圖，已塗抹的標記會暫時消失或被蓋住（取決於標記是畫在哪）
-            // 為求開發者標記流暢，我們這裡採取「直接對畫布操作」的邏輯
             ctx.fillStyle = "#ffffff";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
-            // 如果你之前已經在畫布上有噴砂或畫框，我們需要先畫回之前的「像素快照」
-            if(history.length > 0) {
-                const lastImg = new Image();
-                lastImg.src = history[history.length-1].canvasURL;
-                // 注意：這裡為了效能，簡單處理
-            }
-
+            // 如果要完美呈現，這裡應該先貼上「標記層」，再畫上「物件層」
+            // 為了不弄複雜，我們採用物件移動時清空背景的邏輯
             images.forEach(item => {
                 ctx.drawImage(item.img, item.x, item.y, item.w, item.h);
                 if (item === selectedItem) {
                     ctx.setLineDash([5, 5]);
-                    ctx.strokeStyle = "#8e9775";
+                    ctx.strokeStyle = varColor('--morandi-green');
+                    ctx.lineWidth = 2;
                     ctx.strokeRect(item.x, item.y, item.w, item.h);
                     ctx.setLineDash([]);
-                    ctx.fillStyle = "#8e9775";
-                    ctx.fillRect(item.x + item.w - 12, item.y + item.h - 12, 12, 12);
+                    ctx.fillStyle = varColor('--morandi-green');
+                    ctx.fillRect(item.x + item.w - 15, item.y + item.h - 15, 15, 15);
                 }
             });
         }
     }
+
+    function varColor(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
 
     function getMouse(e) {
         const r = canvas.getBoundingClientRect();
@@ -223,13 +223,11 @@
             selectedItem = null;
             for (let i = images.length - 1; i >= 0; i--) {
                 const img = images[i];
-                // 自由縮放點
-                if (x > img.x + img.w - 20 && x < img.x + img.w + 5 && y > img.y + img.h - 20 && y < img.y + img.h + 5) {
+                if (x > img.x + img.w - 25 && x < img.x + img.w + 5 && y > img.y + img.h - 25 && y < img.y + img.h + 5) {
                     img.isResizing = true;
                     selectedItem = img;
                     break;
                 }
-                // 移動圖片
                 if (x > img.x && x < img.x + img.w && y > img.y && y < img.y + img.h) {
                     img.isDragging = true;
                     selectedItem = img;
@@ -252,8 +250,8 @@
                 selectedItem.x = x - selectedItem.w / 2;
                 selectedItem.y = y - selectedItem.h / 2;
             } else if (selectedItem.isResizing) {
-                selectedItem.w = Math.max(30, x - selectedItem.x);
-                selectedItem.h = Math.max(30, y - selectedItem.y);
+                selectedItem.w = Math.max(40, x - selectedItem.x);
+                selectedItem.h = Math.max(40, y - selectedItem.y);
             }
             render();
         } else if (isDrawing) {
@@ -269,9 +267,7 @@
     };
 
     canvas.onmouseup = () => {
-        if (isDrawing || (selectedItem && (selectedItem.isDragging || selectedItem.isResizing))) {
-            saveState();
-        }
+        if (isDrawing || (selectedItem && (selectedItem.isDragging || selectedItem.isResizing))) saveState();
         isDrawing = false;
         if (selectedItem) {
             selectedItem.isDragging = false;
@@ -281,7 +277,7 @@
 
     function applyBrush(x, y) {
         const size = parseInt(brushSizeInput.value);
-        const m = 12; 
+        const m = 12; // 調整這裡可改變馬賽克精細度
         const l = x - size/2, t = y - size/2;
         for(let i=0; i<size; i+=m) {
             for(let j=0; j<size; j+=m) {
@@ -294,25 +290,16 @@
         }
     }
 
-    // 快捷鍵
-    window.onkeydown = e => { if((e.ctrlKey || e.metaKey) && e.key === 'z') undo(); };
+    window.onkeydown = e => { if((e.ctrlKey || e.metaKey) && e.key === 'z') { e.preventDefault(); undo(); } };
 
-    function clearBoard() { 
-        images = []; 
-        ctx.fillStyle = "#ffffff";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        saveState();
-        render(); 
-    }
-
+    function clearBoard() { images = []; ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, canvas.width, canvas.height); saveState(); render(); }
     function exportImage() {
         const link = document.createElement('a');
-        link.download = 'UsDone-Markup.png';
-        link.href = canvas.toDataURL();
+        link.download = 'UsDone-HighRes.png';
+        link.href = canvas.toDataURL('image/png', 1.0);
         link.click();
     }
 
-    window.onresize = init;
     init();
 </script>
 </body>
